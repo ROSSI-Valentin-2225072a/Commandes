@@ -203,7 +203,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         }
 
         String query = "INSERT INTO Commande (`IdCommande`, `PrixCommande`, `AdresseLivraison`, `DateCommande`, `DateLivraison`, `IdUtilisateur`)" +
-                "VALUES ("+IdCommande+","+PrixCommande+","+AdresseLivraison+","+DateCommande+","+DateLivraison+","+IdUtilisateur+")";
+                "VALUES (\""+IdCommande+"\",\""+PrixCommande+"\",\""+AdresseLivraison+"\",\""+DateCommande+"\",\""+DateLivraison+"\",\""+IdUtilisateur+"\")";
 
         try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
             ps.executeUpdate();
