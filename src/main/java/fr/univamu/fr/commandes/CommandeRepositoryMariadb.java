@@ -8,15 +8,29 @@ import java.io.Closeable;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Cette classe implémente l'interface CommandeRepositoryInterface et fournit des méthodes pour interagir avec une base de données MariaDB pour les commandes.
+ */
 public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, Closeable {
 
     protected Connection dbConnection;
 
+    /**
+     * Constructeur de la classe CommandeRepositoryMariadb.
+     * @param infoConnection Informations de connexion à la base de données.
+     * @param user Nom d'utilisateur pour se connecter à la base de données.
+     * @param pwd Mot de passe pour se connecter à la base de données.
+     * @throws SQLException Si une erreur survient lors de l'accès à la base de données.
+     * @throws ClassNotFoundException Si la classe du pilote JDBC n'est pas trouvée.
+     */
     public CommandeRepositoryMariadb (String infoConnection, String user, String pwd) throws java.sql.SQLException, java.lang.ClassNotFoundException {
         Class.forName("org.mariadb.jdbc.Driver");
         dbConnection = DriverManager.getConnection(infoConnection, user, pwd);
     }
 
+    /**
+     * Ferme la connexion à la base de données.
+     */
     @Override
     public void close() {
         try{
@@ -27,6 +41,11 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         }
     }
 
+    /**
+     * Récupère une commande à partir de son identifiant.
+     * @param IdCommande L'identifiant de la commande à récupérer.
+     * @return La commande correspondant à l'identifiant donné, ou null si aucune commande n'est trouvée.
+     */
     @Override
     public Commande getCommande(int IdCommande) {
         Commande selectedCommande = null;
@@ -76,6 +95,11 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         return selectedCommande;
     }
 
+    /**
+     * Récupère toutes les commandes depuis la base de données.
+     * @return Une liste d'objets Commande contenant toutes les commandes.
+     * @throws RuntimeException Si une erreur survient lors de l'exécution de la requête SQL.
+     */
     @Override
     public ArrayList<Commande> getAllCommandes() {
         ArrayList<Commande> listCommandes;
@@ -132,6 +156,17 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         return listCommandes;
     }
 
+    /**
+     * Met à jour une commande existante dans la base de données.
+     * @param idCommande L'identifiant de la commande à mettre à jour.
+     * @param prixCommande Le nouveau prix de la commande.
+     * @param adresseLivraison La nouvelle adresse de livraison de la commande.
+     * @param dateCommande La nouvelle date de commande de la commande.
+     * @param dateLivraison La nouvelle date de livraison de la commande.
+     * @param idUtilisateur Le nouvel identifiant de l'utilisateur associé à la commande.
+     * @return true si la mise à jour est réussie, sinon false.
+     * @throws RuntimeException Si une erreur survient lors de l'exécution de la requête SQL.
+     */
     @Override
     public boolean updateCommande(int idCommande, int prixCommande, String adresseLivraison, String dateCommande, String dateLivraison, int idUtilisateur) {
         String query = "UPDATE Commande SET IdCommande=?, PrixCommande=?, AdresseLivraison=?, " +
@@ -156,6 +191,12 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         return ( nbRowModified != 0 );
     }
 
+    /**
+     * Supprime une commande de la base de données.
+     * @param IdCommande L'identifiant de la commande à supprimer.
+     * @return true si la suppression est réussie, sinon false.
+     * @throws RuntimeException Si une erreur survient lors de l'exécution de la requête SQL.
+     */
     @Override
     public boolean removeCommande (int IdCommande) {
         String query = "DELETE FROM DetailCommande WHERE IdCommande = " + IdCommande;
@@ -181,7 +222,12 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
 
         return ( nbRowModified != 0);
     }
-
+    /**
+     * Enregistre une nouvelle commande dans la base de données.
+     * @param nouvelleCommande Les détails de la nouvelle commande à enregistrer.
+     * @return true si l'enregistrement est réussi, sinon false.
+     */
+    @Override
     public boolean registerCommande (JsonObject nouvelleCommande) {
 
         int IdCommande = generateIdCommande();
