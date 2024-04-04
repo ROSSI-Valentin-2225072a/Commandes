@@ -1,6 +1,8 @@
 package fr.univamu.fr.commandes;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.persistence.Id;
 import jakarta.ws.rs.*;
@@ -61,5 +63,15 @@ public class CommandeResource {
             return Response.ok("Commande supprimee").build();
         else
             return Response.status( Response.Status.NOT_FOUND).build();
+    }
+
+    @POST
+    @Path("/add")
+    @Consumes("application/json")
+    public Response addMenu(JsonObject nouvelleCommande) {
+        if (service.registerCommande(nouvelleCommande))
+            return Response.ok("Commande passee").build();
+        else
+            return Response.status( Response.Status.CONFLICT ).build();
     }
 }

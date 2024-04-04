@@ -1,5 +1,8 @@
 package fr.univamu.fr.commandes;
 
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.persistence.Id;
 
 import java.io.Closeable;
@@ -178,5 +181,63 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
 
 
         return ( nbRowModified != 0);
+    }
+
+    public boolean registerCommande (JsonObject nouvelleCommande) {
+
+        int IdCommande = generateIdCommande();
+        int PrixCommande = nouvelleCommande.getInt("PrixCommande");
+        String AdresseLivraison = nouvelleCommande.getString("AdresseLivraison");
+        String DateCommande = nouvelleCommande.getString("DateCommande");
+        String DateLivraison = nouvelleCommande.getString("DateLivraison");
+        int IdUtilisateur = nouvelleCommande.getInt("IdUtilisateur");
+
+        JsonArray DetailerCommande = nouvelleCommande.getJsonArray("DetailCommande");
+
+        ArrayList<DetailCommande> detailCommande = new ArrayList<>();
+
+        for (JsonValue obj : DetailerCommande) {
+            int IdMenu = ((JsonObject) obj).getInt("IdMenu");
+            int QuantiteMenu = ((JsonObject) obj).getInt("QuantiteMenu");
+
+            detailCommande.add(new DetailCommande(IdCommande, IdMenu, QuantiteMenu));
+        }
+
+        String query = "INSERT INTO Commande (`IdCommande`, `PrixCommande`, `AdresseLivraison`, `DateCommande`, `DateLivraison`, `IdUtilisateur`)" +
+                "VALUES ("+IdCommande+","+PrixCommande+","+AdresseLivraison+","+DateCommande+","+DateLivraison+","+IdUtilisateur+")";
+
+        try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
+            ps.executeUpdate();
+
+            for (DetailCommande dc : detailCommande) {
+
+                query = "INSERT INTO DetailCommande (`IdCommande`, `IdMenu`, `QuantiteMenu`)" +
+                        "VALUES ("+dc.idCommande+","+dc.idMenu+","+dc.quantiteMenu+")";
+
+                try ( PreparedStatement psdc = dbConnection.prepareStatement(query) ){
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+    private int generateIdCommande() {
+        String query = "SELECT MAX(IdCommande) FROM Commande;";
+
+        int maxId = 0;
+
+        try (PreparedStatement ps = dbConnection.prepareStatement(query)) {
+            ResultSet result = ps.executeQuery();
+            maxId = result.getInt("MAX(IdCommande)") + 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return maxId;
     }
 }

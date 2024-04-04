@@ -1,5 +1,8 @@
 package fr.univamu.fr.commandes;
 
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.ws.rs.NotFoundException;
@@ -50,7 +53,7 @@ public class CommandeService {
                 commande.DateCommande, commande.DateLivraison, commande.IdUtilisateur);
     }
 
-    boolean removeCommande(int IdCommande){
+    public boolean removeCommande(int IdCommande){
         boolean result = false;
 
         Commande commande = commandeRepo.getCommande( IdCommande );
@@ -62,5 +65,9 @@ public class CommandeService {
             result = commandeRepo.removeCommande( IdCommande );
         }
         return result;
+    }
+
+    public boolean registerCommande (JsonObject nouvelleCommande) {
+        return commandeRepo.registerCommande(nouvelleCommande);
     }
 }

@@ -1,5 +1,7 @@
 package fr.univamu.fr.commandes;
 
+import jakarta.json.JsonObject;
+
 import java.util.ArrayList;
 
 public interface CommandeRepositoryInterface {
@@ -14,5 +16,7 @@ public interface CommandeRepositoryInterface {
                                 String dateCommande,String dateLivraison, int idUtilisateur );
 
     public boolean removeCommande( int idCommande );
+
+    public boolean registerCommande(JsonObject nouvelleCommande);
 
 }
