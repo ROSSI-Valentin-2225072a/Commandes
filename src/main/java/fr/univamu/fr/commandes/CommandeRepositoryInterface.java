@@ -12,4 +12,7 @@ public interface CommandeRepositoryInterface {
 
     public boolean updateCommande ( int idCommande, int prixCommande, String adresseLivraison,
                                 String dateCommande,String dateLivraison, int idUtilisateur );
+
+    public boolean removeCommande( int idCommande );
+
 }

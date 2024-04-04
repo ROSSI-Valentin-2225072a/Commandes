@@ -153,4 +153,19 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
 
         return ( nbRowModified != 0 );
     }
+
+    @Override
+    public boolean removeCommande (int IdCommande) {
+        String query = "DELETE FROM Commande, DetailCommande WHERE IdCommande=" + IdCommande;
+
+        int nbRowModified = 0;
+
+        try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
+            // exécution de la requête
+            nbRowModified = ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ( nbRowModified != 0);
+    }
 }

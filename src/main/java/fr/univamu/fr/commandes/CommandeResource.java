@@ -1,8 +1,10 @@
 package fr.univamu.fr.commandes;
 
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Id;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/commandes")
@@ -51,4 +53,13 @@ public class CommandeResource {
             return Response.ok("updated").build();
     }
 
+    @DELETE
+    @Path("/remove/{IdCommande}")
+    public Response removeCommande(@PathParam("IdCommande") int IdCommande) {
+
+        if(service.removeCommande(IdCommande))
+            return Response.ok("Commande supprimée : " + IdCommande).build();
+        else
+            return Response.status( Response.Status.NOT_FOUND).build();
+    }
 }

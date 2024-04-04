@@ -2,6 +2,7 @@ package fr.univamu.fr.commandes;
 
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 
@@ -47,5 +48,22 @@ public class CommandeService {
     public boolean updateCommande(int IdCommande, Commande commande){
         return commandeRepo.updateCommande(IdCommande, commande.PrixCommande, commande.AdresseLivraison,
                 commande.DateCommande, commande.DateLivraison, commande.IdUtilisateur);
+    }
+
+    boolean removeCommande(int IdCommande){
+        boolean result = false;
+
+        // récupération des informations du livre
+        Commande commande = commandeRepo.getCommande( IdCommande );
+
+        //si le livre n'est pas trouvé
+        if( commande == null )
+            throw  new NotFoundException("La commande n'existe pas");
+        else
+        {
+            // supprimer la réservation
+            result = commandeRepo.removeCommande( IdCommande );
+        }
+        return result;
     }
 }
