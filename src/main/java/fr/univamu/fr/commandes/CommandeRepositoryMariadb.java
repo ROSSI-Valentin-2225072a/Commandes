@@ -3,7 +3,6 @@ package fr.univamu.fr.commandes;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
-import jakarta.persistence.Id;
 
 import java.io.Closeable;
 import java.sql.*;
@@ -107,7 +106,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
                     allDetail = new ArrayList<>();
 
                     while (resultDetail.next()) {
-                        int IdCommandeDumper = resultDetail.getInt("IdCommande");
+                        //int IdCommandeDumper = resultDetail.getInt("IdCommande");
                         int IdMenu = resultDetail.getInt("IdMenu");
                         int QuantiteMenu = resultDetail.getInt("QuantiteMenu");
                         DetailCommande currentDetail = new DetailCommande(IdCommande, IdMenu, QuantiteMenu);
@@ -138,7 +137,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         String query = "UPDATE Commande SET IdCommande=?, PrixCommande=?, AdresseLivraison=?, " +
                        "DateLivraison=?, DateCommande=?, IdUtilisateur=?";
 
-        int nbRowModified = 0;
+        int nbRowModified;
 
         try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
             ps.setInt(1, idCommande);
@@ -161,7 +160,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
     public boolean removeCommande (int IdCommande) {
         String query = "DELETE FROM DetailCommande WHERE IdCommande = " + IdCommande;
 
-        int nbRowModified = 0;
+        int nbRowModified;
 
         try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
             // exécution de la requête
@@ -192,7 +191,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         String DateLivraison = nouvelleCommande.getString("dateLivraison");
         int IdUtilisateur = nouvelleCommande.getInt("idUtilisateur");
 
-        JsonArray DetailerCommande = nouvelleCommande.getJsonArray("contentDetail");
+        JsonArray DetailerCommande = nouvelleCommande.getJsonArray("contentDetails");
 
         ArrayList<DetailCommande> detailCommande = new ArrayList<>();
 
@@ -215,7 +214,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
                         "VALUES ("+dc.idCommande+","+dc.idMenu+","+dc.quantiteMenu+")";
 
                 try ( PreparedStatement psdc = dbConnection.prepareStatement(query) ){
-                    ps.executeUpdate();
+                    psdc.executeUpdate();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
