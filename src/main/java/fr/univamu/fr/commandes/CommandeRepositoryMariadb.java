@@ -233,7 +233,10 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
 
         try (PreparedStatement ps = dbConnection.prepareStatement(query)) {
             ResultSet result = ps.executeQuery();
-            maxId = result.getInt("MAX(IdCommande)") + 1;
+            if (result.next()) {
+
+                maxId = result.getInt(1) + 1;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
