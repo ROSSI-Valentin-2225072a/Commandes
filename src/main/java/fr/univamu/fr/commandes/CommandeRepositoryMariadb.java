@@ -192,7 +192,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         String DateLivraison = nouvelleCommande.getString("dateLivraison");
         int IdUtilisateur = nouvelleCommande.getInt("idUtilisateur");
 
-        JsonArray DetailerCommande = nouvelleCommande.getJsonArray("detailContent");
+        JsonArray DetailerCommande = nouvelleCommande.getJsonArray("contentDetail");
 
         ArrayList<DetailCommande> detailCommande = new ArrayList<>();
 
