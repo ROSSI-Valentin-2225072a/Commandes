@@ -185,12 +185,12 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
 
     public boolean registerCommande (JsonObject nouvelleCommande) {
 
-        Integer IdCommande = generateIdCommande();
-        Integer PrixCommande = nouvelleCommande.getInt("PrixCommande");
-        String AdresseLivraison = nouvelleCommande.getString("AdresseLivraison");
-        String DateCommande = nouvelleCommande.getString("DateCommande");
-        String DateLivraison = nouvelleCommande.getString("DateLivraison");
-        Integer IdUtilisateur = nouvelleCommande.getInt("IdUtilisateur");
+        int IdCommande = generateIdCommande();
+        int PrixCommande = nouvelleCommande.getInt("PrixCommande", 0);
+        String AdresseLivraison = nouvelleCommande.getString("AdresseLivraison", "");
+        String DateCommande = nouvelleCommande.getString("DateCommande", "");
+        String DateLivraison = nouvelleCommande.getString("DateLivraison", "");
+        int IdUtilisateur = nouvelleCommande.getInt("IdUtilisateur", 0);
 
         JsonArray DetailerCommande = nouvelleCommande.getJsonArray("DetailCommande");
 
