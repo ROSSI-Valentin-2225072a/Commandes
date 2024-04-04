@@ -53,12 +53,12 @@ public class CommandeResource {
             return Response.ok("updated").build();
     }
 
-    @DELETE
+    @GET
     @Path("/remove/{IdCommande}")
     public Response removeCommande(@PathParam("IdCommande") int IdCommande) {
 
         if(service.removeCommande(IdCommande))
-            return Response.ok("Commande supprimée : " + IdCommande).build();
+            return Response.ok("Commande supprimee").build();
         else
             return Response.status( Response.Status.NOT_FOUND).build();
     }

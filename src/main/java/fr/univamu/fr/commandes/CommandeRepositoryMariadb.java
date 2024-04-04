@@ -156,7 +156,7 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
 
     @Override
     public boolean removeCommande (int IdCommande) {
-        String query = "DELETE FROM Commande, DetailCommande WHERE IdCommande=" + IdCommande;
+        String query = "DELETE FROM DetailCommande WHERE IdCommande = " + IdCommande;
 
         int nbRowModified = 0;
 
@@ -166,6 +166,17 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        query = "DELETE FROM Commande WHERE IdCommande = " + IdCommande;
+
+        try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
+            // exécution de la requête
+            nbRowModified += ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
         return ( nbRowModified != 0);
     }
 }

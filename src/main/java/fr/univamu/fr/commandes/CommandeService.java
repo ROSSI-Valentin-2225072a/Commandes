@@ -53,15 +53,12 @@ public class CommandeService {
     boolean removeCommande(int IdCommande){
         boolean result = false;
 
-        // récupération des informations du livre
         Commande commande = commandeRepo.getCommande( IdCommande );
 
-        //si le livre n'est pas trouvé
         if( commande == null )
             throw  new NotFoundException("La commande n'existe pas");
         else
         {
-            // supprimer la réservation
             result = commandeRepo.removeCommande( IdCommande );
         }
         return result;
