@@ -197,8 +197,8 @@ public class CommandeRepositoryMariadb implements CommandeRepositoryInterface, C
         ArrayList<DetailCommande> detailCommande = new ArrayList<>();
 
         for (JsonValue obj : DetailerCommande) {
-            int IdMenu = ((JsonObject) obj).getInt("IdMenu");
-            int QuantiteMenu = ((JsonObject) obj).getInt("QuantiteMenu");
+            int IdMenu = ((JsonObject) obj).getInt("idMenu");
+            int QuantiteMenu = ((JsonObject) obj).getInt("quantite");
 
             detailCommande.add(new DetailCommande(IdCommande, IdMenu, QuantiteMenu));
         }
